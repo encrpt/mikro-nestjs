@@ -5,7 +5,6 @@ import { ChairModule } from '../chair/chair.module';
 import { ChairService } from '../chair/chair.service';
 import { Chair } from '../chair/entities/chair.entity';
 import { Room } from './entities/room.entity';
-import { RoomModule } from './room.module';
 import { RoomService } from './room.service';
 
 describe('RoomService', () => {
@@ -49,7 +48,7 @@ describe('RoomService', () => {
     room1 = await roomService.findOne(room1Id);
     expect(room1?.chairs.length).toBe(1);
   });
-  
+
   it('should move chairs into room2', async () => {
     let room2 = await roomService.findOne(room2Id);
     expect(room2?.chairs.length).toBe(0);

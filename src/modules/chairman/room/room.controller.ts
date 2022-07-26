@@ -51,18 +51,18 @@ export class RoomController {
   }
 
   @Delete()
-  clearDb(@Param('id') id: string) {
+  clearDb() {
     return this.roomService.clearAll();
   }
 
   // relations - dev only, TODO should post
   @Get(':roomId/put-in/:chairId')
   putIn(@Param('roomId') roomId: string, @Param('chairId') chairId: string) {
-    this.roomService.addChairToRoom(roomId, chairId);
+    return this.roomService.addChairToRoom(roomId, chairId);
   }
 
   @Get(':roomId/pull-out/:chairId')
   pullOut(@Param('roomId') roomId: string, @Param('chairId') chairId: string) {
-    this.roomService.removeChairFromRoom(roomId, chairId);
+    return this.roomService.removeChairFromRoom(roomId, chairId);
   }
 }

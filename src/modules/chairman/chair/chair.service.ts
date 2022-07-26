@@ -5,7 +5,6 @@ import {
   MethodNotAllowedException,
   NotFoundException,
 } from '@nestjs/common';
-import { Room } from '../room/entities/room.entity';
 import { CreateChairDto } from './dto/create-chair.dto';
 import { UpdateChairDto } from './dto/update-chair.dto';
 import { Chair } from './entities/chair.entity';
@@ -42,7 +41,9 @@ export class ChairService {
   }
 
   update(id: string, updateChairDto: UpdateChairDto) {
-    return `This action updates a #${id} chair`;
+    return `This action updates a #${id} chair, ${JSON.stringify(
+      updateChairDto,
+    )}`;
   }
 
   async remove(id: string) {

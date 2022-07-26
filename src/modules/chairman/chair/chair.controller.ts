@@ -52,7 +52,7 @@ export class ChairController {
   }
 
   @Delete()
-  clearDb(@Param('id') id: string) {
+  clearDb() {
     return this.chairService.clearAll();
   }
 }

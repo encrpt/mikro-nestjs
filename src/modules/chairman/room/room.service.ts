@@ -11,7 +11,6 @@ import { Chair } from '../chair/entities/chair.entity';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { Room } from './entities/room.entity';
-import { RoomModule } from './room.module';
 
 @Injectable()
 export class RoomService {
@@ -48,7 +47,9 @@ export class RoomService {
   }
 
   update(id: string, updateRoomDto: UpdateRoomDto) {
-    return `This action updates a #${id} room`;
+    return `This action updates a #${id} room, ${JSON.stringify(
+      updateRoomDto,
+    )}`;
   }
 
   async remove(id: string) {
@@ -111,7 +112,7 @@ export class RoomService {
   async whereIsMyChair(chairId: string) {
     const qb: QueryBuilder<Room> = this.roomRepository.createQueryBuilder();
 
-    qb.select('id');
+    await qb.select('id');
 
     const qbFilter: QBFilterQuery<Room> = {
       chairs: { id: { $eq: chairId } },
