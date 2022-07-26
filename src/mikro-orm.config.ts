@@ -9,6 +9,7 @@ export default (async () => {
     dbName: 'chairman',
     user: 'postgres',
     password: 'Test1234',
+    allowGlobalContext: process.env.NODE_ENV !== 'test' ? false : true,
     debug: true,
     entities: ['./dist/**/*.entity.js'],
     entitiesTs: ['./src/**/*.entity.ts'],

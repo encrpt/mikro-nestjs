@@ -1,5 +1,6 @@
+import { QBFilterQuery } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/postgresql';
+import { EntityRepository, QueryBuilder } from '@mikro-orm/postgresql';
 import {
   Injectable,
   MethodNotAllowedException,
@@ -73,6 +74,14 @@ export class RoomService {
     const room = await this.findOne(roomId);
     const chair = await this.chairService.findOne(chairId);
     if (room && chair && !room.chairs.contains(chair)) {
+      if (chair.room) {
+        // remove from room
+        const roomPre: Room | null = await this.findOne(chair.room.id);
+        if (roomPre) {
+          roomPre.chairs.remove(chair);
+          await this.roomRepository.persistAndFlush(roomPre);
+        }
+      }
       room.chairs.add(chair);
       await this.roomRepository.persistAndFlush(room);
     }
@@ -88,14 +97,25 @@ export class RoomService {
     const room = await this.findOne(roomId);
     const chair = await this.chairService.findOne(chairId);
     if (room && chair && room.chairs.contains(chair)) {
-      // room.chairs.remove(chair);
+      room.chairs.remove(chair);
       // room.chairs.set(room.chairs.getItems().filter((i) => i.id !== chairId));
       // room.chairs.set([]);
-      room.chairs.removeAll();
-      console.log('isDirty:', room.chairs.isDirty());
+      // room.chairs.removeAll();
+      // console.log('isDirty:', room.chairs.isDirty());
       await this.roomRepository.persistAndFlush(room);
-      console.log('isDirty:', room.chairs.isDirty());
+      // console.log('isDirty:', room.chairs.isDirty());
     }
-    await this.roomRepository.flush();
+    // await this.roomRepository.flush();
+  }
+
+  async whereIsMyChair(chairId: string) {
+    const qb: QueryBuilder<Room> = this.roomRepository.createQueryBuilder();
+
+    qb.select('id');
+
+    const qbFilter: QBFilterQuery<Room> = {
+      chairs: { id: { $eq: chairId } },
+    };
+    return qb.where(qbFilter).execute();
   }
 }
