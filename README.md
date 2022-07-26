@@ -22,7 +22,7 @@ npm run test:fails
 
 ```
 
-... and drop a message why [**removeChairFromRoom** in room.service](https://github.com/encrpt/mikro-nestjs/blob/35669db0491b45460dbb10753b452fce5c738bef/src/modules/chairman/room/room.service.ts#L96) failed / missing commit
+... and drop a message why [**removeChairFromRoom** in room.service](https://github.com/encrpt/mikro-nestjs/blob/4091da9b34f80c3fe8660b0ed473f2d7a30d247e/src/modules/chairman/room/room.service.ts#L97) failed / missing commit
 
 ### Entities
 
