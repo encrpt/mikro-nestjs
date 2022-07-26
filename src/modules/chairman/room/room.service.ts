@@ -71,8 +71,8 @@ export class RoomService {
 
   // realations
   async addChairToRoom(roomId: string, chairId: string) {
-    const room = await this.findOne(roomId);
-    const chair = await this.chairService.findOne(chairId);
+    const room: Room | null = await this.findOne(roomId);
+    const chair: Chair | null = await this.chairService.findOne(chairId);
     if (room && chair && !room.chairs.contains(chair)) {
       if (chair.room) {
         // remove from room
@@ -94,8 +94,8 @@ export class RoomService {
     await orm.em.persistAndFlush(author); // book1 will be removed, as well as all original items (before we called `set()`)
   */
   async removeChairFromRoom(roomId: string, chairId: string) {
-    const room = await this.findOne(roomId);
-    const chair = await this.chairService.findOne(chairId);
+    const room: Room | null = await this.findOne(roomId);
+    const chair: Chair | null = await this.chairService.findOne(chairId);
     if (room && chair && room.chairs.contains(chair)) {
       room.chairs.remove(chair);
       // room.chairs.set(room.chairs.getItems().filter((i) => i.id !== chairId));
