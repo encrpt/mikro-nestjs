@@ -5,6 +5,7 @@ import {
   MethodNotAllowedException,
   NotFoundException,
 } from '@nestjs/common';
+import { Room } from '../room/entities/room.entity';
 import { CreateChairDto } from './dto/create-chair.dto';
 import { UpdateChairDto } from './dto/update-chair.dto';
 import { Chair } from './entities/chair.entity';
@@ -35,14 +36,9 @@ export class ChairService {
     return this.chairRepository.findAll();
   }
 
-  async findOne(id: string) {
+  findOne(id: string) {
     // return `This action returns a #${id} chair`;
-    const chair = await this.chairRepository.findOne(id);
-    if (chair) {
-      return chair.toQueryChairDto();
-    } else {
-      throw new NotFoundException();
-    }
+    return this.chairRepository.findOne(id);
   }
 
   update(id: string, updateChairDto: UpdateChairDto) {

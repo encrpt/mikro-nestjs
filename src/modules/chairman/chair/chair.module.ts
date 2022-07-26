@@ -8,5 +8,6 @@ import { Chair } from './entities/chair.entity';
   imports: [MikroOrmModule.forFeature([Chair])],
   controllers: [ChairController],
   providers: [ChairService],
+  exports: [ChairService],
 })
 export class ChairModule {}

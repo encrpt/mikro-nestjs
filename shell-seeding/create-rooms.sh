@@ -1,5 +1,6 @@
 #!/bin/bash
-declare -a StringArrayRooms=("Entrance Hall" "Cross Hall" "East Room" "Green Room" "The Blue Room" "Red Room" "State Dining Room" "Ground Floor Corridor" "Library" "Vermeil Room" "China Room" "East Garden Room" "Oval Office" "Roosevelt Room" "West Wing Lobby")
+# declare -a StringArrayRooms=("Entrance Hall" "Cross Hall" "East Room" "Green Room" "The Blue Room" "Red Room" "State Dining Room" "Ground Floor Corridor" "Library" "Vermeil Room" "China Room" "East Garden Room" "Oval Office" "Roosevelt Room" "West Wing Lobby")
+declare -a StringArrayRooms=("Entrance Hall" "Cross Hall")
 
 for ((i = 0; i < ${#StringArrayRooms[@]}; i++))
 do

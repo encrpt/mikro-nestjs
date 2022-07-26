@@ -17,7 +17,10 @@ export class Room extends EncrptBaseEntity {
   @Unique()
   title: string;
 
-  @OneToMany(() => Chair, (chair) => chair.room, { cascade: [Cascade.REMOVE] })
+  @OneToMany(() => Chair, (chair) => chair.room, {
+    cascade: [Cascade.REMOVE],
+    orphanRemoval: false,
+  })
   chairs = new Collection<Chair>(this);
 
   toListRoomDto(): QueryRoomDto {

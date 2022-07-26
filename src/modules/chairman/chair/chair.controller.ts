@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { ChairService } from './chair.service';
 import { CreateChairDto } from './dto/create-chair.dto';
@@ -31,8 +32,13 @@ export class ChairController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.chairService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const chair = await this.chairService.findOne(id);
+    if (chair) {
+      return chair.toQueryChairDto();
+    } else {
+      throw new NotFoundException();
+    }
   }
 
   @Patch(':id')

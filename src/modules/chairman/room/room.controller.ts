@@ -31,8 +31,13 @@ export class RoomController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.roomService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const room = await this.roomService.findOne(id);
+    if (room) {
+      return room.toQueryRoomDto();
+    } else {
+      throw new NotFoundException();
+    }
   }
 
   @Patch(':id')
@@ -50,4 +55,14 @@ export class RoomController {
     return this.roomService.clearAll();
   }
 
+  // relations - dev only, TODO should post
+  @Get(':roomId/put-in/:chairId')
+  putIn(@Param('roomId') roomId: string, @Param('chairId') chairId: string) {
+    this.roomService.addChairToRoom(roomId, chairId);
+  }
+
+  @Get(':roomId/pull-out/:chairId')
+  pullOut(@Param('roomId') roomId: string, @Param('chairId') chairId: string) {
+    this.roomService.removeChairFromRoom(roomId, chairId);
+  }
 }
