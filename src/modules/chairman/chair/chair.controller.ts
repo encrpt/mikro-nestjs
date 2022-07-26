@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ChairService } from './chair.service';
 import { CreateChairDto } from './dto/create-chair.dto';
 import { UpdateChairDto } from './dto/update-chair.dto';
@@ -6,6 +14,11 @@ import { UpdateChairDto } from './dto/update-chair.dto';
 @Controller('chair')
 export class ChairController {
   constructor(private readonly chairService: ChairService) {}
+
+  @Get('hello')
+  hello() {
+    return 'chair';
+  }
 
   @Post()
   create(@Body() createChairDto: CreateChairDto) {
