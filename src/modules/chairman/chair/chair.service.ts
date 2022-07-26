@@ -1,26 +1,69 @@
-import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/postgresql';
+import {
+  Injectable,
+  MethodNotAllowedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateChairDto } from './dto/create-chair.dto';
 import { UpdateChairDto } from './dto/update-chair.dto';
+import { Chair } from './entities/chair.entity';
 
 @Injectable()
 export class ChairService {
-  create(createChairDto: CreateChairDto) {
-    return 'This action adds a new chair';
+  constructor(
+    @InjectRepository(Chair)
+    private chairRepository: EntityRepository<Chair>,
+  ) {}
+
+  async create(createChairDto: CreateChairDto): Promise<Chair> {
+    const chair: Chair = new Chair();
+    chair.title = createChairDto.title || 'unknonw chair';
+
+    // `This action adds a new chair ${createChairDto.title}`;
+    try {
+      await this.chairRepository.persistAndFlush(chair);
+    } catch (e) {
+      throw new MethodNotAllowedException();
+    }
+
+    return chair;
   }
 
   findAll() {
-    return `This action returns all chair`;
+    // `This action returns all chair`;
+    return this.chairRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} chair`;
+  async findOne(id: string) {
+    // return `This action returns a #${id} chair`;
+    const chair = await this.chairRepository.findOne(id);
+    if (chair) {
+      return chair.toQueryChairDto();
+    } else {
+      throw new NotFoundException();
+    }
   }
 
-  update(id: number, updateChairDto: UpdateChairDto) {
+  update(id: string, updateChairDto: UpdateChairDto) {
     return `This action updates a #${id} chair`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} chair`;
+  async remove(id: string) {
+    // `This action removes a #${id} chair`;
+    const chair: Chair = this.chairRepository.getReference(id);
+    if (chair) {
+      await this.chairRepository.removeAndFlush(chair);
+      return true;
+    } else {
+      throw new NotFoundException('chairId');
+    }
+  }
+
+  async clearAll() {
+    const chairs: Chair[] = await this.findAll();
+    for await (const chair of chairs) {
+      await this.chairRepository.removeAndFlush(chair);
+    }
   }
 }

@@ -1,1 +1,3 @@
-export class CreateChairDto {}
+export class CreateChairDto {
+  title: string;
+}
