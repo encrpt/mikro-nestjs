@@ -1,4 +1,5 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppTestModule } from '../../../app.test.module';
 import { ChairModule } from '../chair/chair.module';
@@ -8,6 +9,8 @@ import { Room } from './entities/room.entity';
 import { RoomService } from './room.service';
 
 describe('RoomService', () => {
+  let app: INestApplication;
+
   let roomService: RoomService;
   let chairService: ChairService;
   let room1Id: string;
@@ -38,6 +41,13 @@ describe('RoomService', () => {
     chair1Id = (await chairService.create({ title: 'chair_1' })).id;
     chair2Id = (await chairService.create({ title: 'chair_2' })).id;
     chair3Id = (await chairService.create({ title: 'chair_3' })).id;
+
+    app = module.createNestApplication();
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   it('should move chairs into room1', async () => {
