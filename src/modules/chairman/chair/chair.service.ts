@@ -1,5 +1,5 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/postgresql';
+import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import {
   Injectable,
   MethodNotAllowedException,
@@ -14,6 +14,8 @@ export class ChairService {
   constructor(
     @InjectRepository(Chair)
     private chairRepository: EntityRepository<Chair>,
+
+    private readonly em: EntityManager,
   ) {}
 
   async create(createChairDto: CreateChairDto): Promise<Chair> {
@@ -22,7 +24,7 @@ export class ChairService {
 
     // `This action adds a new chair ${createChairDto.title}`;
     try {
-      await this.chairRepository.persistAndFlush(chair);
+      await this.em.persist(chair).flush();
     } catch (e) {
       throw new MethodNotAllowedException();
     }
@@ -50,7 +52,7 @@ export class ChairService {
     // `This action removes a #${id} chair`;
     const chair: Chair = this.chairRepository.getReference(id);
     if (chair) {
-      await this.chairRepository.removeAndFlush(chair);
+      await this.em.remove(chair).flush();
       return true;
     } else {
       throw new NotFoundException('chairId');
@@ -60,7 +62,7 @@ export class ChairService {
   async clearAll() {
     const chairs: Chair[] = await this.findAll();
     for await (const chair of chairs) {
-      await this.chairRepository.removeAndFlush(chair);
+      await this.em.remove(chair).flush();
     }
   }
 }

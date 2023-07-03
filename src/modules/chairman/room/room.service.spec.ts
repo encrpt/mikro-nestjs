@@ -92,7 +92,7 @@ describe('RoomService', () => {
     const chair2 = await chairService.findOne(chair2Id);
     expect(chair2?.room).toBe(null);
 
-    // fails
+    // fails - !!! no longer !!!
     const whereIsChair2 = await roomService.whereIsMyChair(chair2Id);
     expect(whereIsChair2.length).toBe(0);
   });

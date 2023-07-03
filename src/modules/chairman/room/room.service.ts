@@ -1,6 +1,10 @@
 import { QBFilterQuery } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository, QueryBuilder } from '@mikro-orm/postgresql';
+import {
+  EntityManager,
+  EntityRepository,
+  QueryBuilder,
+} from '@mikro-orm/postgresql';
 import {
   Injectable,
   MethodNotAllowedException,
@@ -17,6 +21,8 @@ export class RoomService {
   constructor(
     @InjectRepository(Room)
     private roomRepository: EntityRepository<Room>,
+
+    private readonly em: EntityManager,
     private chairService: ChairService,
   ) {}
 
@@ -26,7 +32,7 @@ export class RoomService {
 
     // `This action adds a new room ${createRoomDto.title}`;
     try {
-      await this.roomRepository.persistAndFlush(room);
+      await this.em.persist(room).flush();
     } catch (e) {
       throw new MethodNotAllowedException();
     }
@@ -56,7 +62,7 @@ export class RoomService {
     // `This action removes a #${id} room`;
     const room: Room = this.roomRepository.getReference(id);
     if (room) {
-      await this.roomRepository.removeAndFlush(room);
+      await this.em.remove(room).flush();
       return true;
     } else {
       throw new NotFoundException('roomId');
@@ -66,7 +72,7 @@ export class RoomService {
   async clearAll() {
     const rooms: Room[] = await this.findAll();
     for await (const room of rooms) {
-      await this.roomRepository.removeAndFlush(room);
+      await this.em.remove(room).flush();
     }
   }
 
@@ -80,11 +86,11 @@ export class RoomService {
         const roomPre: Room | null = await this.findOne(chair.room.id);
         if (roomPre) {
           roomPre.chairs.remove(chair);
-          await this.roomRepository.persistAndFlush(roomPre);
+          await this.em.persist(roomPre).flush();
         }
       }
       room.chairs.add(chair);
-      await this.roomRepository.persistAndFlush(room);
+      await this.em.persist(room).flush();
     }
   }
 
@@ -103,7 +109,7 @@ export class RoomService {
       // room.chairs.set([]);
       // room.chairs.removeAll();
       // console.log('isDirty:', room.chairs.isDirty());
-      await this.roomRepository.persistAndFlush(room);
+      await this.em.persist(room).flush();
       // console.log('isDirty:', room.chairs.isDirty());
     }
     // await this.roomRepository.flush();
@@ -117,6 +123,6 @@ export class RoomService {
     const qbFilter: QBFilterQuery<Room> = {
       chairs: { id: { $eq: chairId } },
     };
-    return qb.where(qbFilter).execute();
+    return qb.clone().where(qbFilter).execute();
   }
 }

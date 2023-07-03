@@ -5,7 +5,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Chair } from './entities/chair.entity';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Chair])],
+  imports: [MikroOrmModule.forFeature({ entities: [Chair] })],
   controllers: [ChairController],
   providers: [ChairService],
   exports: [ChairService],

@@ -6,7 +6,7 @@ import { Room } from './entities/room.entity';
 import { ChairModule } from '../chair/chair.module';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Room]), ChairModule],
+  imports: [MikroOrmModule.forFeature({ entities: [Room] }), ChairModule],
   controllers: [RoomController],
   providers: [RoomService],
 })
