@@ -5,7 +5,7 @@ export default (async () => {
   const config = {
     logger: logger.log.bind(logger),
     type: 'postgresql',
-    host: 'localhost',
+    host: 'host.docker.internal',
     dbName: 'chairman',
     user: 'postgres',
     password: 'Test1234',
