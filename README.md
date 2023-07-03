@@ -1,3 +1,13 @@
+## setup in 2023/07
+
+````bash
+
+./from-stetch.sh
+./seeding.sh
+npm run test:fails-no-longer
+
+```
+
 ## mikro-orm
 
 - run PostgeSQL (e.g. docker)
@@ -9,7 +19,7 @@
 
 npx mikro-orm migration:up
 
-```
+````
 
 ## purpose
 

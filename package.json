@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:dev": "jest ./src/modules/chairman/room/room.service.spec.ts --watch --runInBand --no-cache",
-    "test:fails": "jest ./src/modules/chairman/room/room.service.spec.ts --runInBand",
+    "test:fails-no-longer": "jest ./src/modules/chairman/room/room.service.spec.ts --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
